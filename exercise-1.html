@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue 3.4 Template</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/normalize.css/normalize.css"
+    />
+    <style type="text/css">
+      body {
+        font-family: monospace;
+        padding: 20px;
+        font-size: 2em;
+      }
+    </style>
+    <script src="https://unpkg.com/vue@latest"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <template v-if="quizIsFinished">
+        <h1>Your Score is {{score}}</h1>
+        <p><button @click="resetQuiz">Reset Quiz</button></p>
+      </template>
+      <template v-else>
+        <h1>Question:</h1>
+        <p>{{questions[questionIndex]}}</p>
+        <p><input v-model="currentAnswer" type="text" /></p>
+        <p><button @click="submitAnswer">Submit Answer</button></p>
+      </template>
+    </div>
+    <script>
+      const { createApp, ref, computed } = Vue;
+      const App = {
+        setup() {
+          const questionIndex = ref(0);
+          const questions = [
+            "How much is 2 + 2",
+            "How much is 3*5+1",
+            "What is the rest from 3/1",
+          ];
+          const quizIsFinished = computed(() => {
+            return questionIndex.value > questions.length - 1;
+          });
+          const answers = ["4", "16", "0"];
+          const currentAnswer = ref("");
+          const score = ref(0);
+          const submitAnswer = () => {
+            if (currentAnswer.value === answers[questionIndex.value]) {
+              score.value++;
+            }
+            currentAnswer.value = "";
+            questionIndex.value++;
+          };
+          const resetQuiz = () => {
+            currentAnswer.value = "";
+            score.value = 0;
+            questionIndex.value = 0;
+          };
+          return {
+            questions,
+            questionIndex,
+            questions,
+            answers,
+            currentAnswer,
+            submitAnswer,
+            quizIsFinished,
+            resetQuiz,
+            score,
+          };
+        },
+      };
+
+      createApp(App).mount("#app");
+    </script>
+  </body>
+</html>
