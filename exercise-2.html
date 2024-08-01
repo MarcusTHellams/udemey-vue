@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mini Project 2</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/normalize.css/normalize.css"
+    />
+    <style type="text/css">
+      body {
+        font-family: monospace;
+        padding: 20px;
+        font-size: 16px;
+      }
+
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-gap: 10px;
+      }
+
+      .photo {
+        position: relative;
+        border: 1px solid #ccc;
+      }
+
+      .photo img {
+        width: 100%;
+        display: block;
+      }
+
+      .favorite-button {
+        background: none;
+        border: none;
+        color: #ccc;
+        font-size: 24px;
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        cursor: pointer;
+      }
+
+      .favorite-button.active {
+        color: gold;
+      }
+
+      .no-photos {
+        text-align: center;
+        color: #999;
+      }
+
+      form {
+        margin-bottom: 20px;
+      }
+    </style>
+    <script src="https://unpkg.com/vue@latest"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <!-- Form for Adding Photos -->
+      <form @submit.prevent="addPhoto">
+        <input v-model="photoUrl" placeholder="Enter image URL" />
+        <button type="submit">Add Photo</button>
+      </form>
+
+      <!-- Conditional Rendering -->
+      <p v-if="!photos.length" class="no-photos">
+        No photos added yet. Add some!
+      </p>
+
+      <div class="gallery">
+        <!-- List Rendering and Conditional Class Binding -->
+        <div v-for="(photo, index) in photos" :key="photo.id" class="photo">
+          <!-- An image goes here -->
+          <img
+            @click="removePhoto(index)"
+            style="cursor: pointer;"
+            :src="photo.url"
+            :alt="photo.url"
+          />
+          <button
+            @click="toggleFavorite(index)"
+            class="favorite-button"
+            :class="{'active': photo.favorite}"
+          >
+            ★
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const { createApp, ref } = Vue;
+      const App = {
+        setup() {
+          // Keep track of the list of photos
+          const photos = ref([]);
+          // We need a ref for the currently entered URL
+          const photoUrl = ref("");
+          const addPhoto = () => {
+            if (photoUrl.value) {
+              photos.value.push({
+                id: photos.value.length,
+                url: photoUrl.value,
+                favorite: false,
+              });
+              photoUrl.value = "";
+            }
+          };
+          const toggleFavorite = (index) => {
+            photos.value[index].favorite = !photos.value[index].favorite;
+            // Favorite toggling logic
+          };
+          const removePhoto = (index) => {
+            photos.value.splice(index, 1);
+          };
+
+          return {
+            photoUrl,
+            photos,
+            addPhoto,
+            toggleFavorite,
+            removePhoto,
+          };
+        },
+      };
+      createApp(App).mount("#app");
+    </script>
+  </body>
+</html>
