@@ -88,13 +88,11 @@
         >
           <div>
             <!-- Is task done? -->
-            <input
-              @input="toggleComplete(index)"
-              :checked="task.completed"
-              type="checkbox"
-            />
+            <input v-model="task.completed" type="checkbox" />
             <!-- Task description -->
-            <span :class="task.completed">{{task.description}}</span>
+            <span :class="{completed: task.completed}"
+              >{{task.description}}</span
+            >
           </div>
           <!-- Removing a task -->
           <button @click="removeTaskHandler(index)" class="remove-button">
@@ -147,11 +145,6 @@
           const removeTaskHandler = (index) => {
             tasks.value.splice(index, 1);
           };
-
-          const toggleComplete = (index) => {
-            tasks.value[index].completed = !tasks.value[index].completed;
-            tasks.value = [...tasks.value];
-          };
           return {
             tasks,
             filteredTasks,
@@ -159,7 +152,6 @@
             priorityMap,
             addTaskHandler,
             removeTaskHandler,
-            toggleComplete,
           };
         },
       };
