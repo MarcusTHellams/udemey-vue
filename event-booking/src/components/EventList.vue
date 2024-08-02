@@ -4,14 +4,9 @@ import { useMutation, useQueryClient } from '@tanstack/vue-query';
 import { type Booking, type Event } from '@/types';
 import { v4 as uuid } from 'uuid';
 import { api } from '@/lib';
-import { watchEffect } from 'vue';
 
 defineProps<{
   events: Event[] | undefined;
-}>();
-
-const emits = defineEmits<{
-  getIsPending: [pending: boolean];
 }>();
 
 const queryClient = useQueryClient();
@@ -36,6 +31,7 @@ const { mutate, isPending: addBookingPending } = useMutation<Booking, Error, Eve
     const newBooking = {
       id: uuid(),
       eventTitle: variables.title,
+      status: 'pending',
     };
 
     queryClient.setQueryData(['bookings'], (old: Booking[]) => [...old, newBooking]);
@@ -50,10 +46,6 @@ const { mutate, isPending: addBookingPending } = useMutation<Booking, Error, Eve
   onSettled() {
     queryClient.invalidateQueries({ queryKey: ['bookings'] });
   },
-});
-
-watchEffect(() => {
-  emits('getIsPending', addBookingPending.value);
 });
 
 const registerHandler = (event: Event) => {

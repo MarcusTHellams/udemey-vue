@@ -6,7 +6,6 @@ import { useMutation, useQueryClient } from '@tanstack/vue-query';
 defineProps<{
   bookings: Booking[] | undefined;
   isFetching: boolean;
-  addBookingPending: boolean;
 }>();
 
 const queryClient = useQueryClient();
@@ -46,7 +45,7 @@ const cancelBookingHandler = (id: string) => {
 <template>
   <section v-if="bookings" class="grid grid-cols-1 gap-4">
     <BookingCard
-      :pending="addBookingPending || isFetching"
+      :pending="booking.status === 'pending' || isFetching"
       @delete-booking="cancelBookingHandler($event)"
       :booking="booking"
       v-for="booking in bookings"
