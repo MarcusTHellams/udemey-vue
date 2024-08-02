@@ -31,7 +31,7 @@ const isFetching = toRef(() => queries.value[1].isFetching);
   <main class="container my-16">
     <h1>Event Booking App</h1>
     <h2>All Events</h2>
-    <EventList :events="events" />
+    <EventList :is-booking-fetching="isFetching" :events="events" />
     <h2>Your Bookings</h2>
     <BookingList :is-fetching="isFetching" :bookings="bookings" />
   </main>

@@ -7,6 +7,7 @@ import { api } from '@/lib';
 
 defineProps<{
   events: Event[] | undefined;
+  isBookingFetching: boolean;
 }>();
 
 const queryClient = useQueryClient();
@@ -32,6 +33,7 @@ const { mutate, isPending: addBookingPending } = useMutation<Booking, Error, Eve
       id: uuid(),
       eventTitle: variables.title,
       status: 'pending',
+      userId: '1',
     };
 
     queryClient.setQueryData(['bookings'], (old: Booking[]) => [...old, newBooking]);
@@ -42,6 +44,7 @@ const { mutate, isPending: addBookingPending } = useMutation<Booking, Error, Eve
       ['bookings'],
       (context as { previousBookings: Booking[] }).previousBookings,
     );
+    alert('Could not Confirm Booking');
   },
   onSettled() {
     queryClient.invalidateQueries({ queryKey: ['bookings'] });
@@ -49,6 +52,15 @@ const { mutate, isPending: addBookingPending } = useMutation<Booking, Error, Eve
 });
 
 const registerHandler = (event: Event) => {
+  const bookings = queryClient.getQueryData<Booking[]>(['bookings'])!;
+  if (
+    bookings.some((booking) => {
+      return booking.eventId === event.id && booking.userId === '1';
+    })
+  ) {
+    alert('You are already registered for this event');
+    return;
+  }
   mutate(event);
 };
 </script>
@@ -56,7 +68,7 @@ const registerHandler = (event: Event) => {
 <template>
   <section v-if="events" class="grid grid-cols-2 gap-8">
     <EventCard
-      :pending="addBookingPending"
+      :pending="addBookingPending || isBookingFetching"
       :event="event"
       v-for="event in events"
       :key="event.id"

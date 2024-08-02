@@ -14,7 +14,7 @@ defineEmits<{
 <template>
   <SectionCard>
     <div class="flex justify-between items-center">
-      <p>{{ booking.eventTitle }}</p>
+      <p>{{ booking.eventTitle }} {{ booking.status }}</p>
       <Button
         :disabled="pending"
         @click="$emit('deleteBooking', booking.id)"

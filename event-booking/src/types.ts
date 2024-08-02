@@ -8,7 +8,7 @@ export interface Event {
 
 export interface Booking {
   id: string;
-  userId: number;
+  userId: string;
   eventId: string;
   eventTitle: string;
   status: string;
