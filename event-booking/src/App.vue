@@ -3,9 +3,7 @@ import { BookingList, EventList } from '@/components';
 import { api } from '@/lib';
 import { type Booking, type Event } from '@/types';
 import { useQueries } from '@tanstack/vue-query';
-import { ref, toRef } from 'vue';
-
-const addBookingPending = ref(false);
+import { toRef } from 'vue';
 
 const queries = useQueries({
   queries: [
@@ -33,12 +31,8 @@ const isFetching = toRef(() => queries.value[1].isFetching);
   <main class="container my-16">
     <h1>Event Booking App</h1>
     <h2>All Events</h2>
-    <EventList @get-is-pending="addBookingPending = $event" :events="events" />
+    <EventList :events="events" />
     <h2>Your Bookings</h2>
-    <BookingList
-      :add-booking-pending="addBookingPending"
-      :is-fetching="isFetching"
-      :bookings="bookings"
-    />
+    <BookingList :is-fetching="isFetching" :bookings="bookings" />
   </main>
 </template>
