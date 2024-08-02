@@ -2,11 +2,15 @@
 import { BookingCard, LoadingEventCard } from '@/components';
 import { api } from '@/lib';
 import { type Booking } from '@/types';
-import { useMutation, useQueryClient } from '@tanstack/vue-query';
-defineProps<{
-  bookings: Booking[] | undefined;
-  isFetching: boolean;
-}>();
+import { useMutation, useQueryClient, useQuery } from '@tanstack/vue-query';
+import { toast } from 'vue-sonner';
+
+const { isFetching, data: bookings } = useQuery({
+  queryKey: ['bookings'],
+  async queryFn() {
+    return (await api.get<Booking[]>('/bookings')).data;
+  },
+});
 
 const queryClient = useQueryClient();
 
@@ -31,6 +35,9 @@ const { mutate } = useMutation<Booking, Error, string>({
       ['bookings'],
       (context as { previousBookings: Booking[] }).previousBookings,
     );
+    toast.error('Unable to Cancel Booking at this Time', {
+      position: 'top-center',
+    });
   },
   onSettled() {
     queryClient.invalidateQueries({ queryKey: ['bookings'] });
