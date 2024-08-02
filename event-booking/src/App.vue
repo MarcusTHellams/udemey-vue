@@ -121,11 +121,9 @@ const cancelBookingHandler = (id: string) => {
         :pending="
           deleteBookingPending ||
           addBookingPending ||
-          Boolean(
-            queryClient.isFetching({
-              queryKey: ['bookings'],
-            }),
-          )
+          !!queryClient.isFetching({
+            queryKey: ['bookings'],
+          })
         "
         @delete-booking="cancelBookingHandler($event)"
         :booking="booking"
