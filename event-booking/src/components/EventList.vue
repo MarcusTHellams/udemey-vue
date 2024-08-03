@@ -18,7 +18,7 @@ const {
 } = useQuery({
   queryKey: ['events'],
   async queryFn() {
-    return (await api.get<Event[]>('/event')).data;
+    return (await api.get<Event[]>('/events')).data;
   },
 });
 
@@ -37,7 +37,7 @@ const { mutate, isPending: addBookingPending } = useMutation<Booking, Error, Eve
   },
   async onMutate(variables) {
     await queryClient.cancelQueries({ queryKey: ['bookings'] });
-    const previousBookings = queryClient.getQueryData(['bookings']);
+    const previousBookings = queryClient.getQueryData<Booking[]>(['bookings'])!;
 
     const newBooking = {
       id: uuid(),
@@ -91,7 +91,7 @@ const registerHandler = (event: Event) => {
     </SectionCard>
   </template>
   <template v-if="!isLoading">
-    <section v-if="!!events?.length" class="grid grid-cols-2 gap-8">
+    <section v-if="!!events?.length" class="grid md:grid-cols-2 gap-8">
       <EventCard
         :pending="addBookingPending || !!areBookingsFetching"
         :event="event"
@@ -100,7 +100,7 @@ const registerHandler = (event: Event) => {
         @register="registerHandler($event)"
       />
     </section>
-    <template v-else>
+    <template v-else-if="!isError && events?.length === 0">
       <div class="col-span-2 text-center text-gray-500">No Events Yet</div>
     </template>
   </template>
