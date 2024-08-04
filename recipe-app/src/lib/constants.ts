@@ -1,0 +1,1 @@
+export const UDEMY_VUE_RECIPE_APP = 'UDEMY_VUE_RECIPE_APP';

@@ -1,61 +1,23 @@
 <script setup lang="ts">
-import { useQuery } from '@tanstack/vue-query';
-import axios from 'axios';
-import { Button } from '@/components';
-import { ref } from 'vue';
+import { MainLayout, RecipeList, Input } from '@/components';
+import { useRecipeStore } from '@/stores';
+import { computed, ref } from 'vue';
 
-const queryEnabled = ref(false);
+const store = useRecipeStore();
 
-interface User {
-  id: number;
-  name: string;
-  username: string;
-  email: string;
-  address: Address;
-  phone: string;
-  website: string;
-  company: Company;
-}
+const searchQuery = ref('');
 
-interface Company {
-  name: string;
-  catchPhrase: string;
-  bs: string;
-}
-
-interface Address {
-  street: string;
-  suite: string;
-  city: string;
-  zipcode: string;
-  geo: Geo;
-}
-
-interface Geo {
-  lat: string;
-  lng: string;
-}
-
-const enableQueryHandler = () => {
-  queryEnabled.value = !queryEnabled.value;
-};
-
-const userQuery = useQuery({
-  queryKey: ['users'],
-  async queryFn() {
-    return axios.get<User>('https://jsonplaceholder.typicode.com/users/1').then(({ data }) => data);
-  },
-  enabled: queryEnabled,
+const filteredRecipes = computed(() => {
+  return store.filteredRecipes(searchQuery.value);
 });
-const { data: user } = userQuery;
 </script>
 
 <template>
-  <main class="container mt-16">
-    <h1>Hello World</h1>
-    <p><Button @click="enableQueryHandler">Fetch Query</Button></p>
-    <pre data-testid="fetchedData" v-if="user">
-      {{ user }}
-    </pre>
-  </main>
+  <MainLayout>
+    <h1>Recipe Book</h1>
+    <div class="mb-8">
+      <Input type="search" v-model="searchQuery" placeholder="Search Recipes..." />
+    </div>
+    <RecipeList :recipes="filteredRecipes" />
+  </MainLayout>
 </template>
