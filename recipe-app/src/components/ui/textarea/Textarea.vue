@@ -2,12 +2,19 @@
 import type { HTMLAttributes } from 'vue';
 import { useVModel } from '@vueuse/core';
 import { cn } from '@/lib/utils';
+import { ref } from 'vue';
 
 const props = defineProps<{
   class?: HTMLAttributes['class'];
   defaultValue?: string | number;
   modelValue?: string | number;
 }>();
+
+const textAreaRef = ref<HTMLTextAreaElement | null>(null);
+
+defineExpose({
+  textAreaRef: textAreaRef.value,
+});
 
 const emits = defineEmits<{
   (e: 'update:modelValue', payload: string | number): void;
@@ -21,6 +28,7 @@ const modelValue = useVModel(props, 'modelValue', emits, {
 
 <template>
   <textarea
+    ref="textAreaRef"
     v-model="modelValue"
     :class="
       cn(

@@ -42,7 +42,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <MainLayout>
+  <MainLayout class="mb-64">
     <form class="md:w-6/12 md:mx-auto space-y-4" @submit="submitHandler">
       <h1>Edit Recipe</h1>
       <RecipeForm />

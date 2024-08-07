@@ -8,6 +8,9 @@ import {
   Input,
   Textarea,
 } from '@/components';
+import { useAutoSizeTextArea } from '@/composables/useAutoSizeTextArea';
+
+useAutoSizeTextArea('#description');
 </script>
 
 <template>
@@ -24,7 +27,7 @@ import {
     <FormItem>
       <FormLabel>Recipe description</FormLabel>
       <FormControl>
-        <Textarea v-bind="componentField" />
+        <Textarea id="description" v-bind="componentField" />
       </FormControl>
       <FormMessage />
     </FormItem>

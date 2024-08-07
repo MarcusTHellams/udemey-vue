@@ -1,9 +1,5 @@
 <script setup lang="ts">
-import {
-Button,
-MainLayout,
-RecipeForm
-} from '@/components';
+import { Button, MainLayout, RecipeForm } from '@/components';
 import { useRecipeStore } from '@/stores';
 import { toTypedSchema } from '@vee-validate/yup';
 import { useForm } from 'vee-validate';
@@ -30,7 +26,7 @@ const submitHandler = form.handleSubmit((values) => {
 </script>
 
 <template>
-  <MainLayout>
+  <MainLayout class="mb-64">
     <form class="md:w-6/12 md:mx-auto space-y-4" @submit="submitHandler">
       <h1>Add Recipe</h1>
       <RecipeForm />
