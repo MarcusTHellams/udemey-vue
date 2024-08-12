@@ -13,6 +13,10 @@ const form = useForm({
     object({
       name: string().required('Name is Required'),
       description: string().required('Description is Required'),
+      cost: string().transform((value) => {
+        const t = value.replace(/[^\d.]/g, '');
+        return t
+      }),
     }),
   ),
 });
@@ -20,13 +24,17 @@ const form = useForm({
 const router = useRouter();
 
 const submitHandler = form.handleSubmit((values) => {
-  const newRecipe = store.addNewRecipe(values);
-  router.push({ name: 'recipe', params: { id: newRecipe.id } });
+  console.log('values: ', values);
+  // const newRecipe = store.addNewRecipe(values);
+  // router.push({ name: 'recipe', params: { id: newRecipe.id } });
 });
 </script>
 
 <template>
   <MainLayout class="mb-64">
+    <pre>
+      {{ form.values }}
+    </pre>
     <form class="md:w-6/12 md:mx-auto space-y-4" @submit="submitHandler">
       <h1>Add Recipe</h1>
       <RecipeForm />

@@ -18,6 +18,9 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@maskito/core": "^3.0.0",
+    "@maskito/kit": "^3.0.0",
+    "@maskito/vue": "^3.0.0",
     "@tanstack/vue-query": "^5.51.9",
     "@vee-validate/yup": "^4.13.2",
     "@vee-validate/zod": "^4.13.2",

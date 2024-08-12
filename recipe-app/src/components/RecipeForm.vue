@@ -9,8 +9,23 @@ import {
   Textarea,
 } from '@/components';
 import { useAutoSizeTextArea } from '@/composables/useAutoSizeTextArea';
+import { maskitoNumberOptionsGenerator } from '@maskito/kit';
+import { maskito } from '@maskito/vue';
+import { ref } from 'vue';
+defineOptions({
+  directives: { maskito },
+});
 
 useAutoSizeTextArea('#description');
+
+const options = ref(
+  maskitoNumberOptionsGenerator({
+    prefix: '$',
+    thousandSeparator: ',',
+    precision: 2,
+    decimalSeparator: '.',
+  }),
+);
 </script>
 
 <template>
@@ -28,6 +43,15 @@ useAutoSizeTextArea('#description');
       <FormLabel>Recipe description</FormLabel>
       <FormControl>
         <Textarea id="description" v-bind="componentField" />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  </FormField>
+  <FormField v-slot="{ componentField }" name="cost">
+    <FormItem>
+      <FormLabel> Cost </FormLabel>
+      <FormControl>
+        <Input v-maskito="options" type="text" v-bind="componentField" />
       </FormControl>
       <FormMessage />
     </FormItem>

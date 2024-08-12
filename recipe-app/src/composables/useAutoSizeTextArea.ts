@@ -1,19 +1,21 @@
 import { nextTick, onBeforeUnmount, onMounted } from 'vue';
 
 export const useAutoSizeTextArea = (selector: string) => {
+  const resizeTextArea = (target: HTMLTextAreaElement) => {
+    target.style.height = '0px';
+    const scrollHeight = target.scrollHeight;
+    target.style.height = scrollHeight + 20 + 'px';
+  };
+
   const callBack = async (event: Event) => {
     const textarea = event.target as HTMLTextAreaElement;
-    textarea.style.height = '0px';
-    const scrollHeight = textarea.scrollHeight;
-    textarea.style.height = scrollHeight + 'px';
+    resizeTextArea(textarea);
     await nextTick();
   };
 
   const callBack2 = () => {
     const textarea = document.querySelector(selector) as HTMLTextAreaElement;
-    textarea.style.height = '0px';
-    const scrollHeight = textarea.scrollHeight;
-    textarea.style.height = scrollHeight + 'px';
+    resizeTextArea(textarea);
   };
 
   onMounted(async () => {
